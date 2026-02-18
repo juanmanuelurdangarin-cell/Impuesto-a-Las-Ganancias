@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Ganancias 4ta Categoría</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .step { display: none; }
+        .step.active { display: block; }
+        
+        h2 { color: #2c3e50; margin-bottom: 10px; }
+        p { color: #7f8c8d; font-size: 0.95rem; }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #2980b9; }
+
+        .legal-note {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #bdc3c7; /* Letras blancas/grisáceas muy claras */
+            font-style: italic;
+        }
+
+        .result-box {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="step active" id="step1">
+        <h2>Bienvenido</h2>
+        <p>Introduce tu nombre para comenzar con el cálculo de renta de 4ta categoría.</p>
+        <input type="text" id="nombre" placeholder="Tu nombre">
+        <button onclick="nextStep(2)">Continuar</button>
+        <p class="legal-note">Sujeto a Ley de Impuesto a las Ganancias (T.O. 2019).</p>
+    </div>
+
+    <div class="step" id="step2">
+        <h2>Ingresos Brutos</h2>
+        <p><span id="user-name"></span>, ingresa el promedio de tu sueldo bruto mensual (incluyendo adicionales).</p>
+        <input type="number" id="bruto" placeholder="Ej: 2500000">
+        <button onclick="nextStep(3)">Continuar</button>
+        <p class="legal-note">Art. 82 - Ganancias del trabajo personal ejecutado en relación de dependencia.</p>
+    </div>
+
+    <div class="step" id="step3">
+        <h2>Cargas de Familia</h2>
+        <p>Ingresa el monto anual total por deducciones (Hijos, Cónyuge) si corresponden.</p>
+        <input type="number" id="deduccionesFam" placeholder="Total deducciones anuales">
+        <button onclick="calculate()">Calcular Impuesto</button>
+        <p class="legal-note">Art. 30 - Deducciones Personales (Mínimo no imponible y cargas de familia).</p>
+    </div>
+
+    <div class="step" id="step4">
+        <h2>Resultado del Cálculo</h2>
+        <div id="resultado" class="result-box"></div>
+        <button onclick="location.reload()">Reiniciar</button>
+        <p class="legal-note">Art. 94 - Escalas y alícuotas aplicables.</p>
+    </div>
+</div>
+
+<script>
+    // Valores de ejemplo (Deben actualizarse según AFIP vigente)
+    const constantes = {
+        mni: 3000000, // Ganancia No Imponible anual (Ejemplo)
+        deduccionEspecial: 14000000, // Ejemplo de deducción especial 4ta cat
+    };
+
+    function nextStep(step) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + step).classList.add('active');
+        
+        if(step === 2) {
+            document.getElementById('user-name').innerText = document.getElementById('nombre').value;
+        }
+    }
+
+    function calculate() {
+        const nombre = document.getElementById('nombre').value;
+        const brutoAnual = parseFloat(document.getElementById('bruto').value) * 13; // Incluye SAC
+        const cargasFamilia = parseFloat(document.getElementById('deduccionesFam').value) || 0;
+        
+        // 1. Calcular Ganancia Neta Sujeta a Impuesto
+        let gananciaNeta = brutoAnual - constantes.mni - constantes.deduccionEspecial - cargasFamilia;
+        
+        if (gananciaNeta < 0) gananciaNeta = 0;
+
+        // 2. Aplicar Escala (Simplificación de la tabla del Art. 94)
+        // Aquí se debería aplicar la tabla progresiva. Usaremos un promedio estimado del 25% para el ejemplo.
+        let impuestoAnual = 0;
+        if (gananciaNeta > 0) {
+            impuestoAnual = gananciaNeta * 0.25; // Alícuota simplificada para el ejemplo
+        }
+
+        const impuestoMensual = impuestoAnual / 12;
+
+        const resDiv = document.getElementById('resultado');
+        resDiv.innerHTML = `
+            <strong>Estimado para ${nombre}:</strong><br><br>
+            Ganancia Neta Imponible: $${gananciaNeta.toLocaleString()}<br>
+            <hr>
+            <strong>Impuesto Anual: $${impuestoAnual.toLocaleString()}</strong><br>
+            <strong>Impuesto Mensual: $${impuestoMensual.toLocaleString()}</strong>
+        `;
+
+        nextStep(4);
+    }
+</script>
+
+</body>
+</html>
