@@ -1,154 +1,1141 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Ganancias 4ta Categoría</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-        }
-        .step { display: none; }
-        .step.active { display: block; }
-        
-        h2 { color: #2c3e50; margin-bottom: 10px; }
-        p { color: #7f8c8d; font-size: 0.95rem; }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 20px 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
-        }
-        button:hover { background-color: #2980b9; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impuesto a las Ganancias 4ª Categoría — Argentina 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #252a36;
+    --accent: #e8b84b;
+    --accent2: #c4832a;
+    --text: #e8e8e4;
+    --text-muted: #7a7f8e;
+    --text-dim: #3d4355;
+    --red: #e05252;
+    --green: #52b788;
+    --note: #1e2230;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+  
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1017 0%, #111820 50%, #0a0e14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(232,184,75,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 20px;
+  }
+  .hero-badges {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;
+  }
+  .badge {
+    background: rgba(232,184,75,0.1);
+    border: 1px solid rgba(232,184,75,0.25);
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
 
-        .legal-note {
-            margin-top: 20px;
-            font-size: 0.7rem;
-            color: #bdc3c7; /* Letras blancas/grisáceas muy claras */
-            font-style: italic;
-        }
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    margin-top: 32px;
+    align-items: start;
+  }
+  @media(max-width: 820px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .sticky-panel { position: static !important; }
+  }
+  
+  /* SECTION */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .section:hover { border-color: rgba(232,184,75,0.2); }
+  
+  .section-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover { background: rgba(255,255,255,0.02); }
+  
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(232,184,75,0.1);
+    border: 1px solid rgba(232,184,75,0.2);
+    padding: 2px 7px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+  .section-title-wrap { flex: 1; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .section-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .section-toggle {
+    font-size: 18px;
+    color: var(--text-dim);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .section.open .section-toggle { transform: rotate(180deg); }
+  
+  .section-body {
+    display: none;
+    padding: 24px;
+  }
+  .section.open .section-body { display: block; }
+  
+  /* FIELDS */
+  .field-group { margin-bottom: 20px; }
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .field-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  input[type="number"], select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input[type="number"]:focus, select:focus { border-color: var(--accent); }
+  select { cursor: pointer; }
+  select option { background: #1a1e28; }
 
-        .result-box {
-            background: #e8f4fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: left;
-        }
-    </style>
+  .input-with-prefix {
+    position: relative;
+  }
+  .input-prefix {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .input-with-prefix input { padding-left: 30px; }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .checkbox-item:hover { border-color: rgba(232,184,75,0.3); background: rgba(232,184,75,0.03); }
+  .checkbox-item input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checkbox-item label {
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    flex: 1;
+  }
+  .checkbox-item .amount-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+  }
+
+  .counter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .counter-row label { font-size: 13px; flex: 1; }
+  .counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .counter-btn {
+    background: var(--surface2);
+    border: none;
+    color: var(--text);
+    width: 32px; height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .counter-btn:hover { background: rgba(232,184,75,0.15); color: var(--accent); }
+  .counter-val {
+    width: 40px; height: 32px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    color: var(--accent);
+  }
+
+  /* LEGAL NOTE */
+  .legal-note {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: rgba(10,12,16,0.8);
+    border-left: 2px solid var(--text-dim);
+  }
+  .legal-note-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .legal-note-body {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .legal-note-body strong { color: #3d4a6a; }
+
+  /* RESULT PANEL */
+  .sticky-panel {
+    position: sticky;
+    top: 24px;
+  }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+  }
+  .result-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  
+  .result-main {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+  .result-label { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px; font-family: 'IBM Plex Mono', monospace; }
+  .result-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .result-amount.zero { color: var(--green); }
+  .result-amount.positive { color: var(--accent); }
+  .result-period { font-size: 11px; color: var(--text-dim); margin-top: 6px; font-family: 'IBM Plex Mono', monospace; }
+
+  .result-breakdown {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+  .breakdown-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .breakdown-row .bname { color: var(--text-muted); }
+  .breakdown-row .bval {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .breakdown-row.deduction .bval { color: var(--red); }
+  .breakdown-row.deduction .bval::before { content: '− '; }
+  .breakdown-row.total .bname { color: var(--text); font-weight: 500; }
+  .breakdown-row.total .bval { color: var(--accent); font-size: 14px; }
+  .breakdown-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 10px 0;
+  }
+
+  .alicuota-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(232,184,75,0.05);
+    border: 1px solid rgba(232,184,75,0.15);
+    margin-top: 16px;
+  }
+  .alicuota-badge .aname { font-size: 11px; color: var(--text-muted); }
+  .alicuota-badge .aval { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--accent); font-weight: 500; }
+
+  .monthly-annual-tabs {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: rgba(232,184,75,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* SCALE TABLE */
+  .scale-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 8px;
+  }
+  .scale-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+  .scale-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(37,42,54,0.5);
+    color: var(--text-muted);
+  }
+  .scale-table tr.active-row td {
+    background: rgba(232,184,75,0.08);
+    color: var(--accent);
+  }
+  .scale-table .alicuota-col { color: var(--accent2); font-weight: 500; }
+  .scale-table tr.active-row .alicuota-col { color: var(--accent); }
+  
+  /* DEDUCCIONES DISPLAY */
+  .deduc-list { margin-top: 4px; }
+  .deduc-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(37,42,54,0.5);
+    font-size: 12px;
+  }
+  .deduc-item:last-child { border-bottom: none; }
+  .deduc-item .dname { color: var(--text-muted); }
+  .deduc-item .dval { font-family: 'IBM Plex Mono', monospace; color: var(--text); }
+  .deduc-item .dval.active { color: var(--accent); }
+
+  .info-box {
+    background: rgba(82,183,136,0.06);
+    border: 1px solid rgba(82,183,136,0.2);
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--green);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.6;
+  }
+  .warning-box {
+    background: rgba(224,82,82,0.06);
+    border: 1px solid rgba(224,82,82,0.2);
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--red);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  .footer-bar {
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 16px;
+  }
+  .footer-bar p { font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; }
+
+  /* ANIMATION */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .section { animation: fadeIn 0.4s ease both; }
+  .section:nth-child(1) { animation-delay: 0.05s; }
+  .section:nth-child(2) { animation-delay: 0.1s; }
+  .section:nth-child(3) { animation-delay: 0.15s; }
+  .section:nth-child(4) { animation-delay: 0.2s; }
+  .section:nth-child(5) { animation-delay: 0.25s; }
+
+  .result-amount { transition: color 0.3s; }
+
+  .sub-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+</style>
 </head>
 <body>
 
-<div class="card">
-    <div class="step active" id="step1">
-        <h2>Bienvenido</h2>
-        <p>Introduce tu nombre para comenzar con el cálculo de renta de 4ta categoría.</p>
-        <input type="text" id="nombre" placeholder="Tu nombre">
-        <button onclick="nextStep(2)">Continuar</button>
-        <p class="legal-note">Sujeto a Ley de Impuesto a las Ganancias (T.O. 2019).</p>
+<div class="hero">
+  <div class="container">
+    <div class="hero-label">Calculadora Fiscal · Argentina · Vigente 2026</div>
+    <h1>Impuesto a las<br><span>Ganancias</span> 4ª Cat.</h1>
+    <div class="hero-sub">Ley 27.743 · Decreto 652/2024 · Valores Ene–Jun 2026 (IPC +14,29%)</div>
+    <div class="hero-badges">
+      <div class="badge">Ley 27.743</div>
+      <div class="badge">Art. 30 LIG</div>
+      <div class="badge">Art. 94 LIG</div>
+      <div class="badge">ARCA / ex-AFIP</div>
+      <div class="badge">Semestre I · 2026</div>
     </div>
-
-    <div class="step" id="step2">
-        <h2>Ingresos Brutos</h2>
-        <p><span id="user-name"></span>, ingresa el promedio de tu sueldo bruto mensual (incluyendo adicionales).</p>
-        <input type="number" id="bruto" placeholder="Ej: 2500000">
-        <button onclick="nextStep(3)">Continuar</button>
-        <p class="legal-note">Art. 82 - Ganancias del trabajo personal ejecutado en relación de dependencia.</p>
-    </div>
-
-    <div class="step" id="step3">
-        <h2>Cargas de Familia</h2>
-        <p>Ingresa el monto anual total por deducciones (Hijos, Cónyuge) si corresponden.</p>
-        <input type="number" id="deduccionesFam" placeholder="Total deducciones anuales">
-        <button onclick="calculate()">Calcular Impuesto</button>
-        <p class="legal-note">Art. 30 - Deducciones Personales (Mínimo no imponible y cargas de familia).</p>
-    </div>
-
-    <div class="step" id="step4">
-        <h2>Resultado del Cálculo</h2>
-        <div id="resultado" class="result-box"></div>
-        <button onclick="location.reload()">Reiniciar</button>
-        <p class="legal-note">Art. 94 - Escalas y alícuotas aplicables.</p>
-    </div>
+  </div>
 </div>
 
+<div class="container">
+  <div class="main-grid">
+
+    <!-- LEFT: FORMULARIO -->
+    <div class="form-col">
+
+      <!-- SECCIÓN 1: INGRESOS -->
+      <div class="section open" id="sec-ingresos">
+        <div class="section-header" onclick="toggleSection('sec-ingresos')">
+          <div class="section-num">01</div>
+          <div class="section-title-wrap">
+            <div class="section-title">Ingresos Brutos</div>
+            <div class="section-subtitle">Remuneración bruta mensual y otras fuentes</div>
+          </div>
+          <div class="section-toggle">▾</div>
+        </div>
+        <div class="section-body">
+
+          <div class="field-group">
+            <label class="field-label">Categoría de contribuyente</label>
+            <select id="categoria" onchange="calcular()">
+              <option value="relacion_dependencia">Empleado en relación de dependencia</option>
+              <option value="autonomo">Trabajador autónomo</option>
+              <option value="nuevo_profesional">Nuevo profesional / emprendedor (primeros 3 años)</option>
+              <option value="jubilado">Jubilado / Pensionado</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Sueldo / Honorario bruto mensual</label>
+            <span class="field-hint">Ingresá el importe bruto antes de descuentos jubilatorios y de obra social</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="sueldo" placeholder="0" min="0" step="1000" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Otros ingresos gravados mensuales (opcional)</label>
+            <span class="field-hint">Horas extras, bonos regulares, comisiones, honorarios adicionales</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="otros_ingresos" placeholder="0" min="0" step="1000" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">SAC (Sueldo Anual Complementario) — imputación mensual</label>
+            <span class="field-hint">El SAC tributa como ingreso. Se puede prorratear: equivale al 8,33% del sueldo mensual. Marcá si querés incluirlo en el cálculo mensual.</span>
+            <div class="checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="incluir_sac" onchange="calcular()">
+                <label for="incluir_sac">Incluir incidencia mensual del SAC (8,33% del sueldo)</label>
+                <span class="amount-tag" id="sac-preview">$ 0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="legal-note">
+            <div class="legal-note-title">Art. 2 y Art. 79 — Ley de Impuesto a las Ganancias (T.O. 2019)</div>
+            <div class="legal-note-body">
+              Son ganancias de la cuarta categoría las provenientes del trabajo personal ejecutado en relación de dependencia (inc. a), jubilaciones y pensiones (inc. c), y honorarios profesionales y retribuciones de socios (incs. f/g). El SAC está gravado en función del Decreto 652/2024 y su imputación mensual se determina por el régimen de retención de la RG ARCA vigente. <strong>Ley 27.743, art. 5: restableció el carácter de renta gravada para el SAC a partir del período fiscal 2024.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 2: APORTES Y DEDUCCIONES OBLIGATORIAS -->
+      <div class="section open" id="sec-aportes">
+        <div class="section-header" onclick="toggleSection('sec-aportes')">
+          <div class="section-num">02</div>
+          <div class="section-title-wrap">
+            <div class="section-title">Aportes Obligatorios</div>
+            <div class="section-subtitle">Deducciones sobre el sueldo bruto antes del impuesto</div>
+          </div>
+          <div class="section-toggle">▾</div>
+        </div>
+        <div class="section-body">
+
+          <div class="field-group">
+            <label class="field-label">Aportes personales (jubilación + obra social + ANSSAL)</label>
+            <span class="field-hint">Para empleados en relación de dependencia, generalmente 17% del bruto (11% jubilación + 3% obra social + 3% PAMI). Si sabés el monto exacto, ingresalo:</span>
+            <div class="checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="calcular_aportes_auto" checked onchange="toggleAportes()">
+                <label for="calcular_aportes_auto">Calcular automáticamente (17% del bruto)</label>
+              </div>
+            </div>
+          </div>
+          <div class="field-group" id="aportes-manual-group" style="display:none">
+            <label class="field-label">Monto real de aportes mensuales</label>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="aportes_reales" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Cuota sindical / gremial mensual (si aplica)</label>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="cuota_sindical" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="legal-note">
+            <div class="legal-note-title">Art. 85 inc. b) y Art. 30 — LIG · RG ARCA sobre retención</div>
+            <div class="legal-note-body">
+              Los aportes personales obligatorios al SIPA, al sistema de obras sociales (Ley 23.660) y a las cuotas sindicales son deducibles en su totalidad sin límite de monto, por tratarse de obligaciones legales del trabajador. No forman parte de las <strong>deducciones personales del Art. 30</strong>, sino que reducen directamente la ganancia bruta de la categoría (Art. 85, inc. b). La cuota sindical con destino a fines específicos también es deducible (Dictamen AFIP 27/2012).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 3: DEDUCCIONES PERSONALES -->
+      <div class="section open" id="sec-personales">
+        <div class="section-header" onclick="toggleSection('sec-personales')">
+          <div class="section-num">03</div>
+          <div class="section-title-wrap">
+            <div class="section-title">Deducciones Personales</div>
+            <div class="section-subtitle">Art. 30 LIG — GNI, Deducción Especial y Cargas de Familia</div>
+          </div>
+          <div class="section-toggle">▾</div>
+        </div>
+        <div class="section-body">
+
+          <div class="field-group">
+            <label class="field-label">Estado civil y cónyuge / conviviente a cargo</label>
+            <span class="field-hint">El cónyuge o unión convivencial es deducible si sus ingresos anuales no superan la GNI ($5.151.802,50). Art. 30 inc. b) LIG.</span>
+            <div class="checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="conyuge" onchange="calcular()">
+                <label for="conyuge">Tengo cónyuge / conviviente a cargo</label>
+                <span class="amount-tag">$4.851.964,66 / año</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Hijos / Hijastros menores de 18 años a cargo</label>
+            <span class="field-hint">$2.446.863,48 anuales por hijo. En caso de hijo incapacitado para el trabajo, la deducción se duplica: $4.893.726,96.</span>
+            <div class="counter-row">
+              <label>Hijos (sin incapacidad)</label>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="cambiarContador('hijos', -1)">−</button>
+                <div class="counter-val" id="hijos-val">0</div>
+                <button class="counter-btn" onclick="cambiarContador('hijos', 1)">+</button>
+              </div>
+            </div>
+            <div class="counter-row">
+              <label>Hijos con incapacidad para el trabajo</label>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="cambiarContador('hijos_incap', -1)">−</button>
+                <div class="counter-val" id="hijos_incap-val">0</div>
+                <button class="counter-btn" onclick="cambiarContador('hijos_incap', 1)">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Otros familiares a cargo</label>
+            <span class="field-hint">Padre, madre, abuelo, suegro, hermano, etc. siempre que los ingresos del familiar no superen la GNI. Deducción: $2.446.863,48 por familiar.</span>
+            <div class="counter-row">
+              <label>Otros familiares deducibles (Art. 30 inc. c)</label>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="cambiarContador('otros_familiares', -1)">−</button>
+                <div class="counter-val" id="otros_familiares-val">0</div>
+                <button class="counter-btn" onclick="cambiarContador('otros_familiares', 1)">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TABLA DEDUCCIONES ANUALES -->
+          <div class="deduc-list" id="deduc-list-display"></div>
+
+          <div class="legal-note">
+            <div class="legal-note-title">Art. 30 LIG · Decreto 652/2024 · Actualización IPC +14,29% (ene 2026)</div>
+            <div class="legal-note-body">
+              El Art. 30 de la LIG (T.O. 2019) establece las deducciones personales, actualizadas semestralmente por IPC según la Ley 27.743. <strong>Ganancia No Imponible (GNI): $5.151.802,50 anuales.</strong> La Deducción Especial para empleados en relación de dependencia es 4,8 veces la GNI. Para autónomos: 3,5 veces la GNI. Para nuevos profesionales/emprendedores (primeros 3 ejercicios): 4 veces la GNI. La condición de "a cargo" requiere que el familiar conviva con el contribuyente y que sus ingresos no superen la GNI anual.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 4: DEDUCCIONES GENERALES -->
+      <div class="section" id="sec-generales">
+        <div class="section-header" onclick="toggleSection('sec-generales')">
+          <div class="section-num">04</div>
+          <div class="section-title-wrap">
+            <div class="section-title">Deducciones Generales</div>
+            <div class="section-subtitle">Art. 85 LIG — Gastos deducibles con límites</div>
+          </div>
+          <div class="section-toggle">▾</div>
+        </div>
+        <div class="section-body">
+
+          <div class="field-group">
+            <label class="field-label">Alquiler de vivienda (mensual)</label>
+            <span class="field-hint">Podés deducir el 40% del alquiler anual, hasta el 40% de la GNI ($2.060.721 anuales). Requerís el contrato y comprobantes. Art. 85 inc. h).</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="alquiler" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Personal doméstico (mensual)</label>
+            <span class="field-hint">Deducible hasta el equivalente a la GNI anual ($5.151.802,50). Se computa el monto efectivamente abonado. Art. 85 inc. g).</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="servicio_domestico" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Seguros de vida / retiro (mensual)</label>
+            <span class="field-hint">Tope anual: $753.472,14. Incluye seguros de vida colectivos y planes de retiro. Art. 85 inc. b).</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="seguros" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Gastos educativos para hijos a cargo (mensual)</label>
+            <span class="field-hint">Cuotas escolares, útiles y servicios conexos para hijos menores de 24 años. Tope: 40% de la GNI anual ($2.060.721). Art. 85 inc. i).</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="gastos_educativos" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Medicina prepaga / cuotas médico-asistenciales (mensual)</label>
+            <span class="field-hint">Tope: 5% de la ganancia neta acumulada del período. Solo el excedente del aporte a obra social que el contribuyente abona por su cuenta. Art. 85 inc. d).</span>
+            <div class="input-with-prefix">
+              <span class="input-prefix">$</span>
+              <input type="number" id="medicina_prepaga" placeholder="0" min="0" oninput="calcular()">
+            </div>
+          </div>
+
+          <div class="legal-note">
+            <div class="legal-note-title">Art. 85 LIG · Circular ARCA 1/2025 · RG ARCA 5008</div>
+            <div class="legal-note-body">
+              Las deducciones del Art. 85 se computan en el período fiscal en que se devenguen o abonen. Los alquileres requieren contrato registrado y CBU del locador. Los gastos de sepelio tienen un tope histórico de <strong>$996,23</strong> (no actualizado, prácticamente inoperante). Los intereses hipotecarios mantienen el tope de <strong>$20.000 anuales</strong> (valor congelado desde 2001), lo que los hace irrelevantes en la práctica. La medicina prepaga: el límite del 5% aplica sobre la ganancia neta del ejercicio antes de imputar esta deducción (cálculo iterativo).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 5: ESCALA DE ALÍCUOTAS -->
+      <div class="section" id="sec-escala">
+        <div class="section-header" onclick="toggleSection('sec-escala')">
+          <div class="section-num">05</div>
+          <div class="section-title-wrap">
+            <div class="section-title">Escala de Alícuotas</div>
+            <div class="section-subtitle">Art. 94 LIG · Semestre I 2026 — Tu tramo activo se resalta</div>
+          </div>
+          <div class="section-toggle">▾</div>
+        </div>
+        <div class="section-body">
+          <table class="scale-table" id="escala-table">
+            <thead>
+              <tr>
+                <th>Ganancia Neta Imponible Acumulada</th>
+                <th>Fijo ($)</th>
+                <th>Alícuota</th>
+                <th>Sobre excedente de</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-tramo="0">
+                <td>Hasta $2.000.030,09</td>
+                <td>$ 0</td>
+                <td class="alicuota-col">5%</td>
+                <td>$ 0</td>
+              </tr>
+              <tr data-tramo="1">
+                <td>Hasta $4.000.060,17</td>
+                <td>$ 100.001,50</td>
+                <td class="alicuota-col">9%</td>
+                <td>$2.000.030,09</td>
+              </tr>
+              <tr data-tramo="2">
+                <td>Hasta $9.000.135,40</td>
+                <td>$ 280.004,21</td>
+                <td class="alicuota-col">12%</td>
+                <td>$4.000.060,17</td>
+              </tr>
+              <tr data-tramo="3">
+                <td>Hasta $60.750.913,96</td>
+                <td>$ 970.014,59</td>
+                <td class="alicuota-col">19%</td>
+                <td>$9.000.135,40</td>
+              </tr>
+              <tr data-tramo="4">
+                <td>Más de $60.750.913,96</td>
+                <td>$14.672.720,74</td>
+                <td class="alicuota-col">35%</td>
+                <td>$60.750.913,96</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="legal-note" style="margin-top:16px">
+            <div class="legal-note-title">Art. 94 LIG · Ley 27.743 · Jurisprudencia Relevante</div>
+            <div class="legal-note-body">
+              La Ley 27.743 (2024) derogó el impuesto cedular del Art. 90.1 y restableció la escala progresiva del Art. 94 con tramos actualizados semestralmente por IPC. <strong>Fallo "García, María Isabel c/ AFIP" (CSJN, 26/03/2019):</strong> La Corte Suprema estableció que aplicar ganancias a jubilados en situación de vulnerabilidad (enfermedad grave, ancianidad) puede resultar confiscatorio. Doctrina extendida por tribunales inferiores en 2025-2026 a casos con alta carga de gastos médicos. <strong>Amparos sindicales 2024-2025:</strong> Varios sindicatos (UOCRA, ATE Patagonia) cuestionaron la reincorporación de bonos de productividad y fallos de caja al impuesto. La Cámara Contencioso Administrativa Federal rechazó la mayoría de los planteos, validando la potestad del Congreso (CNCAF, Sala IV, causa "UOCRA c/ ARCA", 2025).
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /form-col -->
+
+    <!-- RIGHT: RESULTADO -->
+    <div class="sticky-panel">
+      <div class="result-card">
+        <div class="result-header">— Resultado del Cálculo —</div>
+
+        <div class="monthly-annual-tabs">
+          <button class="tab-btn active" id="tab-mensual" onclick="switchTab('mensual')">MENSUAL</button>
+          <button class="tab-btn" id="tab-anual" onclick="switchTab('anual')">ANUAL</button>
+        </div>
+
+        <div class="result-main">
+          <div class="result-label">IMPUESTO ESTIMADO</div>
+          <div class="result-amount" id="result-impuesto">$ 0</div>
+          <div class="result-period" id="result-period">por mes</div>
+        </div>
+
+        <div class="result-breakdown">
+          <div class="breakdown-title">— Detalle del Cálculo —</div>
+          <div class="breakdown-row">
+            <span class="bname">Ingreso bruto</span>
+            <span class="bval" id="br-bruto">$ 0</span>
+          </div>
+          <div class="breakdown-row deduction">
+            <span class="bname">Aportes obligatorios</span>
+            <span class="bval" id="br-aportes">$ 0</span>
+          </div>
+          <div class="breakdown-row deduction">
+            <span class="bname">Ded. generales</span>
+            <span class="bval" id="br-generales">$ 0</span>
+          </div>
+          <div class="breakdown-row deduction">
+            <span class="bname">Ded. personales (prorrata)</span>
+            <span class="bval" id="br-personales">$ 0</span>
+          </div>
+          <hr class="breakdown-divider">
+          <div class="breakdown-row total">
+            <span class="bname">Ganancia neta sujeta</span>
+            <span class="bval" id="br-neta">$ 0</span>
+          </div>
+        </div>
+
+        <div class="alicuota-badge" id="alicuota-badge" style="display:none">
+          <span class="aname">Tramo / Alícuota marginal</span>
+          <span class="aval" id="alicuota-marginal">—</span>
+        </div>
+
+        <div id="result-message" class="info-box" style="margin-top:16px; display:none"></div>
+
+      </div>
+
+      <!-- VALORES ANUALES REFERENCIA -->
+      <div class="result-card" style="margin-top:16px; padding: 20px 28px;">
+        <div class="breakdown-title">— Deducciones Aplicadas (Anuales) —</div>
+        <div id="deduc-breakdown-panel" class="deduc-list"></div>
+      </div>
+
+    </div><!-- /sticky-panel -->
+
+  </div><!-- /main-grid -->
+
+  <div class="footer-bar">
+    <p>Calculadora informativa · No reemplaza asesoramiento profesional · Valores Ene–Jun 2026</p>
+    <p>Ley 27.743 · T.O. Decreto 824/19 · Decreto 652/2024 · ARCA</p>
+  </div>
+
+</div><!-- /container -->
+
 <script>
-    // Valores de ejemplo (Deben actualizarse según AFIP vigente)
-    const constantes = {
-        mni: 3000000, // Ganancia No Imponible anual (Ejemplo)
-        deduccionEspecial: 14000000, // Ejemplo de deducción especial 4ta cat
-    };
+// ===================== CONSTANTES 2026 (Semestre I) =====================
+const C = {
+  GNI: 5151802.50,
+  CONYUGE: 4851964.66,
+  HIJO: 2446863.48,
+  HIJO_INCAP: 4893726.96,
+  DED_ESP_RD: 24728652.02,    // relación dependencia
+  DED_ESP_AUT: 18031308.76,   // autónomo
+  DED_ESP_NP: 20607210.01,    // nuevo profesional
+  DED_ESP_JUB: 24728652.02,   // jubilados igual que RD
+  LIM_SEGUROS: 753472.14,
+  LIM_SEPELIO: 996.23,
+  LIM_HIPOTECA: 20000,
+  LIM_ALQUILER_PCT: 0.40,     // 40% del alquiler
+  LIM_EDUCAT_PCT: 0.40,       // 40% de GNI
+  LIM_DOM: 5151802.50,        // = GNI
+  LIM_PREPAGA_PCT: 0.05,      // 5% ganancia neta
+  // Escala anual Art. 94
+  ESCALA: [
+    { desde: 0, hasta: 2000030.09, fijo: 0, pct: 0.05 },
+    { desde: 2000030.09, hasta: 4000060.17, fijo: 100001.50, pct: 0.09 },
+    { desde: 4000060.17, hasta: 9000135.40, fijo: 280004.21, pct: 0.12 },
+    { desde: 9000135.40, hasta: 60750913.96, fijo: 970014.59, pct: 0.19 },
+    { desde: 60750913.96, hasta: Infinity, fijo: 14672720.74, pct: 0.35 },
+  ]
+};
 
-    function nextStep(step) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById('step' + step).classList.add('active');
-        
-        if(step === 2) {
-            document.getElementById('user-name').innerText = document.getElementById('nombre').value;
-        }
+// ===================== STATE =====================
+const state = {
+  hijos: 0,
+  hijos_incap: 0,
+  otros_familiares: 0,
+  activeTab: 'mensual'
+};
+
+function fmtP(n) {
+  return '$ ' + Math.round(n).toLocaleString('es-AR');
+}
+
+function cambiarContador(key, delta) {
+  state[key] = Math.max(0, state[key] + delta);
+  document.getElementById(key + '-val').textContent = state[key];
+  calcular();
+}
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function toggleAportes() {
+  const auto = document.getElementById('calcular_aportes_auto').checked;
+  document.getElementById('aportes-manual-group').style.display = auto ? 'none' : 'block';
+  calcular();
+}
+
+function switchTab(tab) {
+  state.activeTab = tab;
+  document.getElementById('tab-mensual').classList.toggle('active', tab === 'mensual');
+  document.getElementById('tab-anual').classList.toggle('active', tab === 'anual');
+  renderResult(state.lastCalc);
+}
+
+function aplicarEscala(gni_anual) {
+  if (gni_anual <= 0) return { impuesto: 0, tramo: null };
+  let tramo = null;
+  for (let t of C.ESCALA) {
+    if (gni_anual > t.desde) tramo = t;
+    else break;
+  }
+  if (!tramo) return { impuesto: 0, tramo: null };
+  const impuesto = tramo.fijo + (gni_anual - tramo.desde) * tramo.pct;
+  return { impuesto, tramo };
+}
+
+function calcular() {
+  const cat = document.getElementById('categoria').value;
+  const sueldo = parseFloat(document.getElementById('sueldo').value) || 0;
+  const otros = parseFloat(document.getElementById('otros_ingresos').value) || 0;
+  const incl_sac = document.getElementById('incluir_sac').checked;
+  const sac_mensual = incl_sac ? sueldo * 0.0833 : 0;
+
+  // SAC preview
+  document.getElementById('sac-preview').textContent = fmtP(sac_mensual);
+
+  const bruto_mensual = sueldo + otros + sac_mensual;
+  const bruto_anual = bruto_mensual * 12;
+
+  // Aportes
+  let aportes_mensual;
+  if (document.getElementById('calcular_aportes_auto').checked) {
+    aportes_mensual = (cat === 'relacion_dependencia' || cat === 'jubilado') ? sueldo * 0.17 : 0;
+  } else {
+    aportes_mensual = parseFloat(document.getElementById('aportes_reales').value) || 0;
+  }
+  const sindical = parseFloat(document.getElementById('cuota_sindical').value) || 0;
+  const aportes_total_mensual = aportes_mensual + sindical;
+  const aportes_anual = aportes_total_mensual * 12;
+
+  // Deducciones generales anuales
+  const alq_m = parseFloat(document.getElementById('alquiler').value) || 0;
+  const dom_m = parseFloat(document.getElementById('servicio_domestico').value) || 0;
+  const seg_m = parseFloat(document.getElementById('seguros').value) || 0;
+  const edu_m = parseFloat(document.getElementById('gastos_educativos').value) || 0;
+  const prep_m = parseFloat(document.getElementById('medicina_prepaga').value) || 0;
+
+  const lim_educat = C.GNI * C.LIM_EDUCAT_PCT;
+  const alq_ded = Math.min(alq_m * 12 * C.LIM_ALQUILER_PCT, C.GNI * C.LIM_ALQUILER_PCT);
+  const dom_ded = Math.min(dom_m * 12, C.LIM_DOM);
+  const seg_ded = Math.min(seg_m * 12, C.LIM_SEGUROS);
+  const edu_ded = Math.min(edu_m * 12, lim_educat);
+
+  // Prepaga: 5% ganancia neta (usamos approx de ganancia neta sin prepaga)
+  const gn_sin_prep = bruto_anual - aportes_anual - alq_ded - dom_ded - seg_ded - edu_ded;
+  const prep_ded = Math.min(prep_m * 12, gn_sin_prep * C.LIM_PREPAGA_PCT);
+
+  const gen_total = alq_ded + dom_ded + seg_ded + edu_ded + prep_ded;
+
+  // Deducciones personales anuales
+  let ded_esp;
+  if (cat === 'relacion_dependencia' || cat === 'jubilado') ded_esp = C.DED_ESP_RD;
+  else if (cat === 'autonomo') ded_esp = C.DED_ESP_AUT;
+  else ded_esp = C.DED_ESP_NP;
+
+  const conyuge_ded = document.getElementById('conyuge').checked ? C.CONYUGE : 0;
+  const hijos_ded = state.hijos * C.HIJO;
+  const hijos_incap_ded = state.hijos_incap * C.HIJO_INCAP;
+  const otros_fam_ded = state.otros_familiares * C.HIJO;
+
+  const pers_total = C.GNI + ded_esp + conyuge_ded + hijos_ded + hijos_incap_ded + otros_fam_ded;
+
+  // Ganancia Neta Sujeta a Impuesto (anual)
+  const gni_anual = Math.max(0, bruto_anual - aportes_anual - gen_total - pers_total);
+
+  // Impuesto anual
+  const { impuesto: imp_anual, tramo } = aplicarEscala(gni_anual);
+  const imp_mensual = imp_anual / 12;
+
+  state.lastCalc = {
+    bruto_mensual, bruto_anual,
+    aportes_total_mensual, aportes_anual,
+    gen_total, pers_total,
+    gni_anual, gni_mensual: gni_anual / 12,
+    imp_anual, imp_mensual,
+    tramo,
+    deds: { alq_ded, dom_ded, seg_ded, edu_ded, prep_ded, ded_esp, conyuge_ded, hijos_ded, hijos_incap_ded, otros_fam_ded }
+  };
+
+  renderResult(state.lastCalc);
+  renderDeducList(state.lastCalc);
+  renderEscala(tramo);
+}
+
+function renderResult(calc) {
+  if (!calc) return;
+  const mensual = state.activeTab === 'mensual';
+  const impuesto = mensual ? calc.imp_mensual : calc.imp_anual;
+  const gni = mensual ? calc.gni_mensual : calc.gni_anual;
+
+  const el = document.getElementById('result-impuesto');
+  el.textContent = fmtP(impuesto);
+  el.className = 'result-amount ' + (impuesto <= 0 ? 'zero' : 'positive');
+
+  document.getElementById('result-period').textContent = mensual ? 'por mes (1/12 del anual)' : 'por año';
+  document.getElementById('br-bruto').textContent = fmtP(mensual ? calc.bruto_mensual : calc.bruto_anual);
+  document.getElementById('br-aportes').textContent = fmtP(mensual ? calc.aportes_total_mensual : calc.aportes_anual);
+  document.getElementById('br-generales').textContent = fmtP(mensual ? calc.gen_total / 12 : calc.gen_total);
+  document.getElementById('br-personales').textContent = fmtP(mensual ? calc.pers_total / 12 : calc.pers_total);
+  document.getElementById('br-neta').textContent = fmtP(mensual ? calc.gni_mensual : calc.gni_anual);
+
+  const badge = document.getElementById('alicuota-badge');
+  const msg = document.getElementById('result-message');
+  if (calc.tramo && calc.imp_anual > 0) {
+    badge.style.display = 'flex';
+    document.getElementById('alicuota-marginal').textContent = (calc.tramo.pct * 100) + '%';
+    msg.style.display = 'none';
+  } else {
+    badge.style.display = 'none';
+    msg.style.display = 'block';
+    msg.className = 'info-box';
+    msg.textContent = '✓ Sin impuesto determinado. Las deducciones superan la ganancia bruta.';
+  }
+}
+
+function renderDeducList(calc) {
+  const panel = document.getElementById('deduc-breakdown-panel');
+  const d = calc.deds;
+  const items = [
+    ['GNI (Art. 30 inc. a)', C.GNI],
+    ['Ded. Especial (Art. 30 inc. c)', d.ded_esp],
+    ['Cónyuge (Art. 30 inc. b)', d.conyuge_ded],
+    ['Hijos sin incapacidad', d.hijos_ded],
+    ['Hijos con incapacidad', d.hijos_incap_ded],
+    ['Otros familiares', d.otros_fam_ded],
+    ['Alquiler (40% — Art. 85)', d.alq_ded],
+    ['Servicio doméstico', d.dom_ded],
+    ['Seguros de vida/retiro', d.seg_ded],
+    ['Gastos educativos', d.edu_ded],
+    ['Medicina prepaga', d.prep_ded],
+  ];
+  panel.innerHTML = items.map(([name, val]) => val > 0 ? `
+    <div class="deduc-item">
+      <span class="dname">${name}</span>
+      <span class="dval active">${fmtP(val)}</span>
+    </div>` : '').join('');
+
+  // Also update deduc-list-display
+  const dld = document.getElementById('deduc-list-display');
+  dld.innerHTML = `
+    <div style="margin-top:8px; padding:14px 16px; background:var(--note); border:1px solid var(--border);">
+      <div class="breakdown-title" style="margin-bottom:10px">— Montos de referencia 2026 (anuales) —</div>
+      <div class="deduc-item"><span class="dname">GNI</span><span class="dval">${fmtP(C.GNI)}</span></div>
+      <div class="deduc-item"><span class="dname">Cónyuge</span><span class="dval">${fmtP(C.CONYUGE)}</span></div>
+      <div class="deduc-item"><span class="dname">Hijo c/u</span><span class="dval">${fmtP(C.HIJO)}</span></div>
+      <div class="deduc-item"><span class="dname">Hijo incapacitado c/u</span><span class="dval">${fmtP(C.HIJO_INCAP)}</span></div>
+      <div class="deduc-item"><span class="dname">Ded. Especial (RD)</span><span class="dval">${fmtP(C.DED_ESP_RD)}</span></div>
+    </div>
+  `;
+}
+
+function renderEscala(tramo) {
+  const rows = document.querySelectorAll('#escala-table tbody tr');
+  rows.forEach((row, i) => {
+    if (tramo && C.ESCALA[i] === tramo) {
+      row.classList.add('active-row');
+    } else {
+      row.classList.remove('active-row');
     }
+  });
+}
 
-    function calculate() {
-        const nombre = document.getElementById('nombre').value;
-        const brutoAnual = parseFloat(document.getElementById('bruto').value) * 13; // Incluye SAC
-        const cargasFamilia = parseFloat(document.getElementById('deduccionesFam').value) || 0;
-        
-        // 1. Calcular Ganancia Neta Sujeta a Impuesto
-        let gananciaNeta = brutoAnual - constantes.mni - constantes.deduccionEspecial - cargasFamilia;
-        
-        if (gananciaNeta < 0) gananciaNeta = 0;
-
-        // 2. Aplicar Escala (Simplificación de la tabla del Art. 94)
-        // Aquí se debería aplicar la tabla progresiva. Usaremos un promedio estimado del 25% para el ejemplo.
-        let impuestoAnual = 0;
-        if (gananciaNeta > 0) {
-            impuestoAnual = gananciaNeta * 0.25; // Alícuota simplificada para el ejemplo
-        }
-
-        const impuestoMensual = impuestoAnual / 12;
-
-        const resDiv = document.getElementById('resultado');
-        resDiv.innerHTML = `
-            <strong>Estimado para ${nombre}:</strong><br><br>
-            Ganancia Neta Imponible: $${gananciaNeta.toLocaleString()}<br>
-            <hr>
-            <strong>Impuesto Anual: $${impuestoAnual.toLocaleString()}</strong><br>
-            <strong>Impuesto Mensual: $${impuestoMensual.toLocaleString()}</strong>
-        `;
-
-        nextStep(4);
-    }
+// Init
+calcular();
 </script>
-
 </body>
 </html>
